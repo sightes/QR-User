@@ -1,0 +1,7 @@
+jinja2
+fastapi 
+uvicorn 
+qrcode
+python-multipart
+pandas 
+openpyxl

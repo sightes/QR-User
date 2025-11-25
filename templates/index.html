@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Generador de QR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+        .panel {
+            flex: 1;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table th, table td {
+            padding: 6px 10px;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+        .tab-button.active {
+            border-bottom: 2px solid #007bff;
+            font-weight: bold;
+        }
+        .tab-panel {
+            display: none;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+    </style>
+    <script src="/static/app.js" defer></script>
+</head>
+<body>
+    <h1>Generar QR de trabajador</h1>
+
+    <div class="container">
+        <!-- Panel Izquierdo: Formulario -->
+        <div class="panel">
+            <h2>Datos del trabajador</h2>
+
+            <div class="tabs">
+                <button class="tab-button active" data-tab="manual">Ingreso 1 a 1</button>
+                <button class="tab-button" data-tab="excel">Procesar Excel</button>
+            </div>
+
+            <!-- Tab: Ingreso 1 a 1 -->
+            <div id="tab-manual" class="tab-panel active">
+                <form action="/qr" method="post" id="form-trabajador">
+                    <label>Nombre:</label><br>
+                    <input type="text" name="nombre" id="nombre" value="{{ nombre }}" required><br>
+
+                    <label>RUT:</label><br>
+                    <input type="text" name="rut" id="rut" value="{{ rut }}" required><br>
+                    {% if error %}
+                        <div class="error">{{ error }}</div>
+                    {% endif %}
+
+                    <label>Área donde trabaja:</label><br>
+                    <input type="text" name="area" id="area" value="{{ area }}" required><br>
+
+                    <label>EPP:</label><br>
+                    <input type="text" name="epp" id="epp" value="{{ epp }}"><br>
+
+                    <label>Vigilancia:</label><br>
+                    <input type="text" name="vigilancia" id="vigilancia" value="{{ vigilancia }}"><br>
+
+                    <label>Riesgo:</label><br>
+                    <input type="text" name="riesgo" id="riesgo" value="{{ riesgo }}"><br>
+
+                    <button type="submit">Generar QR</button>
+                </form>
+            </div>
+
+            <!-- Tab: Procesar Excel -->
+            <div id="tab-excel" class="tab-panel">
+                <h3>Importar desde Excel</h3>
+                <form action="/upload_excel" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" accept=".xls,.xlsx" required>
+                    <button type="submit">Cargar Excel</button>
+                </form>
+
+                <hr>
+                <h3>Listado de registros del Excel</h3>
+
+                {% if rows %}
+                    <table border="1" cellspacing="0" cellpadding="6">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>RUT</th>
+                                <th>Área</th>
+                                <th>EPP</th>
+                                <th>Vigilancia</th>
+                                <th>Riesgo</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in rows %}
+                            <tr>
+                                <td>{{ r.nombre }}</td>
+                                <td>{{ r.rut }}</td>
+                                <td>{{ r.area }}</td>
+                                <td>{{ r.epp }}</td>
+                                <td>{{ r.vigilancia }}</td>
+                                <td>{{ r.riesgo }}</td>
+                                <td>
+                                    <form action="/qr" method="post" style="display:inline;">
+                                        <input type="hidden" name="nombre" value="{{ r.nombre }}">
+                                        <input type="hidden" name="rut" value="{{ r.rut }}">
+                                        <input type="hidden" name="area" value="{{ r.area }}">
+                                        <input type="hidden" name="epp" value="{{ r.epp }}">
+                                        <input type="hidden" name="vigilancia" value="{{ r.vigilancia }}">
+                                        <input type="hidden" name="riesgo" value="{{ r.riesgo }}">
+                                        <button type="submit">Ver QR</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No hay registros cargados desde Excel.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Panel Derecho: QR + texto -->
+        <div class="panel" style="text-align:center;">
+            <h2>Código QR generado</h2>
+            {% if qr_img %}
+                <img src="data:image/png;base64,{{ qr_img }}" alt="QR generado"
+                     style="max-width: 100%; height: auto;"/>
+                <h3>Texto del QR (para almacenar en BD)</h3>
+                <textarea rows="5" readonly>{{ qr_text }}</textarea>
+                <br><br>
+                <button type="button" onclick="window.history.back()">Volver al listado</button>
+            {% else %}
+                <p>Aquí aparecerá el código QR una vez que ingreses los datos y presiones "Generar QR".</p>
+                <br><br>
+                <button type="button" onclick="window.history.back()">Volver al listado</button>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
