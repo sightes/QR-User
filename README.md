@@ -1,6 +1,44 @@
 # Generador de Códigos QR para Trabajadores
 
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?logo=python)](https://www.python.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-2+-15045D?logo=pandas)](https://pandas.pydata.org/)
+[![License](https://img.shields.io/badge/License-Private-red)](#licencia)
+[![Release](https://img.shields.io/badge/Release-v1.0.0-green)](https://github.com/sightes/QR-User/releases/tag/v1.0.0)
+
 Aplicación web en **FastAPI** que permite:
+
+## About
+
+QR-User es una herramienta de código abierto diseñada para empresas y organizaciones que necesitan generar códigos QR para sus trabajadores de forma rápida y sencilla. Construida con FastAPI y Python, ofrece una solución completa para la gestión de datos de empleados mediante códigos QR.
+
+**¿Por qué QR-User?**
+
+- **Generación Rápida**: Crea códigos QR individuales o masivos desde archivos Excel.
+- **Validación de RUT**: Sistema dual de validación (frontend y backend) para datos chilenos.
+- **Formato JSON**: Los QR contienen datos estructurados en JSON, fáciles de integrar con otras herramientas.
+- **Interfaz Intuitiva**: Panel dual con formulario individual y carga masiva de Excel.
+- **Sin Base de Datos**: No requiere configuración de bases de datos; funciona con archivos.
+- **Fácil Integración**: El formato JSON del QR es compatible con apps móviles y sistemas internos.
+
+Ideal para empresas que necesitan identificar trabajadores, controlar acceso, gestionar EPP (Elementos de Protección Personal), o crear sistemas de vigilancia basados en códigos QR.
+
+## Características principales
+
+| Característica | Estado | Descripción |
+|----------------|--------|-------------|
+| Ingreso individual | ✅ | Formulario manual para un trabajador a la vez |
+| Carga masiva Excel | ✅ | Importa múltiples trabajadores desde .xls/.xlsx |
+| Generación de QR | ✅ | Crea códigos QR con datos del trabajador |
+| Validación de RUT | ✅ | Algoritmo estándar chileno (frontend + backend) |
+| Formato JSON | ✅ | Datos estructurados en JSON dentro del QR |
+| Interfaz web | ✅ | Panel dual con pestañas intuitivas |
+| Sin base de datos | ✅ | No requiere configuración externa |
+| Diseño responsive | ✅ | Funciona en desktop y mobile |
+| Fácil instalación | ✅ | Solo requiere Python y pip |
+| Código abierto | ✅ | Personalizable y extensible |
+
+## Descripción
 
 - Ingresar datos de un trabajador **1 a 1**.
 - Cargar un **Excel masivo** con trabajadores.
@@ -279,6 +317,75 @@ Algunas ideas para futuras mejoras:
 
 - **El Excel no se acepta**  
   Confirmar nombres de columnas, incluyendo mayúsculas y acentos.
+
+---
+
+## Contribuir
+
+Las contribuciones son bienvenidas. Por favor, sigue estos pasos:
+
+### 1. Fork el repositorio
+```bash
+git fork https://github.com/sightes/QR-User.git
+```
+
+### 2. Clona tu fork
+```bash
+git clone https://github.com/tu-usuario/QR-User.git
+cd QR-User
+```
+
+### 3. Crea una rama para tu feature
+```bash
+git checkout -b feature/nueva-funcionalidad
+```
+
+### 4. Instala las dependencias
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Haz tus cambios
+- Sigue la guía de estilo del proyecto
+- Agrega tests para nuevas funcionalidades si aplica
+- Asegúrate de que el código funcione correctamente
+
+### 6. Commit tus cambios
+```bash
+git commit -m "Add: descripción de tu cambio"
+```
+
+### 7. Push a tu fork
+```bash
+git push origin feature/nueva-funcionalidad
+```
+
+### 8. Crea un Pull Request
+- Ve al repositorio original
+- Haz clic en "New Pull Request"
+- Selecciona tu rama
+- Agrega una descripción clara de los cambios
+
+### Convenciones de commits
+
+- `Add:` para nuevas funcionalidades
+- `Fix:` para corrección de bugs
+- `Update:` para mejoras
+- `Remove:` para eliminaciones
+- `Docs:` para documentación
+
+### Reporte de bugs
+
+Si encuentras un bug, por favor abre un issue con:
+1. Título descriptivo
+2. Pasos para reproducir
+3. Comportamiento esperado vs actual
+4. Capturas de pantalla si aplica
+5. Información del sistema (SO, Python version, navegador)
+
+## Licencia
+
+Privado — Proyecto de demostración.
 
 ---
 
